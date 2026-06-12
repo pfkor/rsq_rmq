@@ -17,6 +17,7 @@ private:
 public:
     SqrtDecomposition(const std::vector<T>& arr, BinaryOp op, T identity);
     T query(size_t l, size_t r) const;
+    void update (size_t pos, const T& value);
 };
 
 #include "../src/sqrt_decomp.cpp"

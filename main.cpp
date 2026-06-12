@@ -83,27 +83,27 @@ void test_rmq1d() {
     print_test("Минимум [2,4] после update", min({8,10,9}), rmq.query(2,4));
 }
 
-// // --------------------------------------------------------------
-// // Тесты для SqrtDecomposition (с обновлением)
-// void test_sqrt_decomp() {
-//     cout << "\n=== SqrtDecomposition (корневая декомпозиция) ===\n";
-//     vector<int> arr = {1,2,3,4,5,6,7,8,9,10};
-//     auto sum_op = [](int a,int b){ return a+b; };
-//     SqrtDecomposition<int, decltype(sum_op)> sqrt_sum(arr, sum_op, 0);
-//     print_test("Сумма [0,9] до обновления", 55, sqrt_sum.query(0,9));
+// --------------------------------------------------------------
+// Тесты для SqrtDecomposition (с обновлением)
+void test_sqrt_decomp() {
+    cout << "\n=== SqrtDecomposition (корневая декомпозиция) ===\n";
+    vector<int> arr = {1,2,3,4,5,6,7,8,9,10};
+    auto sum_op = [](int a,int b){ return a+b; };
+    SqrtDecomposition<int, decltype(sum_op)> sqrt_sum(arr, sum_op, 0);
+    print_test("Сумма [0,9] до обновления", 55, sqrt_sum.query(0,9));
 
-//     sqrt_sum.update(5, 100); // arr[5] было 6, стало 100
-//     print_test("Сумма [0,9] после update(5,100)", 55 -6 +100, sqrt_sum.query(0,9));
-//     print_test("Сумма [5,5] после update", 100, sqrt_sum.query(5,5));
+    sqrt_sum.update(5, 100); // arr[5] было 6, стало 100
+    print_test("Сумма [0,9] после update(5,100)", 55 -6 +100, sqrt_sum.query(0,9));
+    print_test("Сумма [5,5] после update", 100, sqrt_sum.query(5,5));
 
-//     // Тест минимума
-//     auto min_op = [](int a,int b){ return min(a,b); };
-//     int inf = numeric_limits<int>::max();
-//     SqrtDecomposition<int, decltype(min_op)> sqrt_min(arr, min_op, inf);
-//     print_test("Минимум [0,9] до update", 1, sqrt_min.query(0,9));
-//     sqrt_min.update(3, -5);
-//     print_test("Минимум [0,9] после update(3,-5)", -5, sqrt_min.query(0,9));
-// }
+    // Тест минимума
+    auto min_op = [](int a,int b){ return min(a,b); };
+    int inf = numeric_limits<int>::max();
+    SqrtDecomposition<int, decltype(min_op)> sqrt_min(arr, min_op, inf);
+    print_test("Минимум [0,9] до update", 1, sqrt_min.query(0,9));
+    sqrt_min.update(3, -5);
+    print_test("Минимум [0,9] после update(3,-5)", -5, sqrt_min.query(0,9));
+}
 
 // // --------------------------------------------------------------
 // // Тесты для SegmentTree
@@ -181,7 +181,7 @@ int main() {
     test_rsq1d();
     test_rsq2d();
     test_rmq1d();
-    // test_sqrt_decomp();
+    test_sqrt_decomp();
     // test_segment_tree();
     // test_fenwick();
     // test_sparse_table();

@@ -62,3 +62,20 @@ T SqrtDecomposition<T, BinaryOp>::query(size_t l, size_t r) const {
 
     return res;
 }
+
+template <typename T, typename BinaryOp>
+void SqrtDecomposition<T, BinaryOp>::update (size_t pos, const T& value) {
+    if (pos >= n) return;
+
+    data[pos] = value;
+    size_t block = pos / block_size;
+
+    T new_agg = identity;
+    size_t start = block * block_size;
+    size_t end = std::min(start + block_size, n);
+
+    for (size_t i = start; i < end; ++i) {
+        new_agg = op(new_agg, data[i]);
+    }
+    block_agg[block] = new_agg;
+}
