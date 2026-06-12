@@ -52,3 +52,23 @@ T SegmentTree<T, BinaryOp>::query(size_t l, size_t r) const {
     if (n == 0 || l > r || r >= n) return identity;
     return query(1, 0, n - 1, l, r);
 }
+
+template <typename T, typename BinaryOp>
+void SegmentTree<T, BinaryOp>::update(size_t pos, const T& value) {
+    if (pos >= n) return;
+    update_tree(1, 0, n-1, pos, value);
+}
+
+template <typename T, typename BinaryOp>
+void SegmentTree<T, BinaryOp>::update_tree(size_t node, size_t left, size_t right, size_t pos, const T& value) {
+    if (left == right) {
+        tree[node] = value;
+        return;
+    }
+
+    size_t mid = left + (right - left) / 2;
+    if (pos <= mid) update_tree(node*2, left, mid, pos, value);
+    if (pos > mid) update_tree(node*2+1, mid+1, right, pos, value);
+    tree[node] = op(tree[node*2], tree[node*2+1]);
+}
+

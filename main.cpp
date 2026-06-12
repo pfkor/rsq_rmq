@@ -105,25 +105,25 @@ void test_sqrt_decomp() {
     print_test("Минимум [0,9] после update(3,-5)", -5, sqrt_min.query(0,9));
 }
 
-// // --------------------------------------------------------------
-// // Тесты для SegmentTree
-// void test_segment_tree() {
-//     cout << "\n=== SegmentTree (дерево отрезков) ===\n";
-//     vector<int> arr = {1,2,3,4,5,6,7,8,9,10};
-//     auto sum_op = [](int a,int b){ return a+b; };
-//     SegmentTree<int, decltype(sum_op)> seg_sum(arr, sum_op, 0);
-//     print_test("Сумма [2,7] до обновления", 3+4+5+6+7+8, seg_sum.query(2,7));
+// --------------------------------------------------------------
+// Тесты для SegmentTree
+void test_segment_tree() {
+    cout << "\n=== SegmentTree (дерево отрезков) ===\n";
+    vector<int> arr = {1,2,3,4,5,6,7,8,9,10};
+    auto sum_op = [](int a,int b){ return a+b; };
+    SegmentTree<int, decltype(sum_op)> seg_sum(arr, sum_op, 0);
+    print_test("Сумма [2,7] до обновления", 3+4+5+6+7+8, seg_sum.query(2,7));
 
-//     seg_sum.update(4, 50);
-//     print_test("Сумма [2,7] после update(4,50)", 3+4+50+6+7+8, seg_sum.query(2,7));
+    seg_sum.update(4, 50);
+    print_test("Сумма [2,7] после update(4,50)", 3+4+50+6+7+8, seg_sum.query(2,7));
 
-//     auto min_op = [](int a,int b){ return min(a,b); };
-//     int inf = numeric_limits<int>::max();
-//     SegmentTree<int, decltype(min_op)> seg_min(arr, min_op, inf);
-//     print_test("Минимум [0,9] до update", 1, seg_min.query(0,9));
-//     seg_min.update(0, -10);
-//     print_test("Минимум [0,9] после update(0,-10)", -10, seg_min.query(0,9));
-// }
+    auto min_op = [](int a,int b){ return min(a,b); };
+    int inf = numeric_limits<int>::max();
+    SegmentTree<int, decltype(min_op)> seg_min(arr, min_op, inf);
+    print_test("Минимум [0,9] до update", 1, seg_min.query(0,9));
+    seg_min.update(0, -10);
+    print_test("Минимум [0,9] после update(0,-10)", -10, seg_min.query(0,9));
+}
 
 // // --------------------------------------------------------------
 // // Тесты для FenwickTree (RSQ)
@@ -182,7 +182,7 @@ int main() {
     test_rsq2d();
     test_rmq1d();
     test_sqrt_decomp();
-    // test_segment_tree();
+    test_segment_tree();
     // test_fenwick();
     // test_sparse_table();
     // test_hybrid_rmq();
