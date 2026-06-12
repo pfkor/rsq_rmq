@@ -8,7 +8,7 @@
 #include "./include/basic.h"
 #include "./include/sqrt_decomp.h"
 #include "./include/segment_tree.h"
-// #include "./include/fenwick.h"
+#include "./include/fenwick.h"
 // #include "./include/sparse_table.h"
 // #include "./include/hybrid_rmq.h"
 
@@ -125,20 +125,20 @@ void test_segment_tree() {
     print_test("Минимум [0,9] после update(0,-10)", -10, seg_min.query(0,9));
 }
 
-// // --------------------------------------------------------------
-// // Тесты для FenwickTree (RSQ)
-// void test_fenwick() {
-//     cout << "\n=== FenwickTree (дерево Фенвика) ===\n";
-//     vector<int> arr = {1,2,3,4,5};
-//     FenwickTree<int> fw(arr);
-//     print_test("Сумма [1,3]", 2+3+4, fw.range_sum(1,3));
-//     print_test("Сумма [0,4]", 15, fw.range_sum(0,4));
+// --------------------------------------------------------------
+// Тесты для FenwickTree (RSQ)
+void test_fenwick() {
+    cout << "\n=== FenwickTree (дерево Фенвика) ===\n";
+    vector<int> arr = {1,2,3,4,5};
+    FenwickTree<int> fw(arr);
+    print_test("Сумма [1,3]", 2+3+4, fw.query(1,3));
+    print_test("Сумма [0,4]", 15, fw.query(0,4));
 
-//     fw.set(2, 10); // {1,2,10,4,5}
-//     print_test("Сумма [0,4] после set(2,10)", 1+2+10+4+5, fw.range_sum(0,4));
-//     fw.set(4, 0);
-//     print_test("Сумма [3,4] после set(4,0)", 4+0, fw.range_sum(3,4));
-// }
+    fw.update(2, 10); // {1,2,10,4,5}
+    print_test("Сумма [0,4] после update(2,10)", 1+2+10+4+5, fw.query(0,4));
+    fw.update(4, 0);
+    print_test("Сумма [3,4] после update(4,0)", 4+0, fw.query(3,4));
+}
 
 // // --------------------------------------------------------------
 // // Тесты для SparseTable (RMQ) – обновление перестраивает таблицу
@@ -183,7 +183,7 @@ int main() {
     test_rmq1d();
     test_sqrt_decomp();
     test_segment_tree();
-    // test_fenwick();
+    test_fenwick();
     // test_sparse_table();
     // test_hybrid_rmq();
 
