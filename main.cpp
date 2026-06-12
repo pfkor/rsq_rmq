@@ -9,7 +9,7 @@
 #include "./include/sqrt_decomp.h"
 #include "./include/segment_tree.h"
 #include "./include/fenwick.h"
-// #include "./include/sparse_table.h"
+#include "./include/sparse_table.h"
 // #include "./include/hybrid_rmq.h"
 
 using namespace std;
@@ -140,21 +140,21 @@ void test_fenwick() {
     print_test("Сумма [3,4] после update(4,0)", 4+0, fw.query(3,4));
 }
 
-// // --------------------------------------------------------------
-// // Тесты для SparseTable (RMQ) – обновление перестраивает таблицу
-// void test_sparse_table() {
-//     cout << "\n=== SparseTable (разреженная таблица) ===\n";
-//     vector<int> arr = {5,3,8,1,9,2};
-//     auto min_op = [](int a,int b){ return min(a,b); };
-//     int inf = numeric_limits<int>::max();
-//     SparseTable<int, decltype(min_op)> st(arr, min_op, inf);
-//     print_test("Минимум [0,5]", 1, st.query(0,5));
-//     print_test("Минимум [2,4]", min(8,1,9), st.query(2,4));
+// --------------------------------------------------------------
+// Тесты для SparseTable (RMQ) – обновление перестраивает таблицу
+void test_sparse_table() {
+    cout << "\n=== SparseTable (разреженная таблица) ===\n";
+    vector<int> arr = {5,3,8,1,9,2};
+    auto min_op = [](int a,int b){ return min(a,b); };
+    int inf = numeric_limits<int>::max();
+    SparseTable<int, decltype(min_op)> st(arr, min_op, inf);
+    print_test("Минимум [0,5]", 1, st.query(0,5));
+    print_test("Минимум [2,4]", min({8,1,9}), st.query(2,4));
 
-//     st.update(3, 100); // стало {5,3,8,100,9,2}
-//     print_test("Минимум [0,5] после update(3,100)", 2, st.query(0,5));
-//     print_test("Минимум [2,4] после update", min(8,100,9), st.query(2,4));
-// }
+    st.update(3, 100);
+    print_test("Минимум [0,5] после update(3,100)", 2, st.query(0,5));
+    print_test("Минимум [2,4] после update", min({8,100,9}), st.query(2,4));
+}
 
 // // --------------------------------------------------------------
 // // Тесты для HybridRMQ (корневая + sparse table)
@@ -184,7 +184,7 @@ int main() {
     test_sqrt_decomp();
     test_segment_tree();
     test_fenwick();
-    // test_sparse_table();
+    test_sparse_table();
     // test_hybrid_rmq();
 
     cout << "\nВсе тесты завершены.\n";
