@@ -5,12 +5,16 @@
 #include <limits>
 #include <cmath>
 #include <algorithm>
+#include <random>
+#include <cmath>
+#include <limits>
 #include "./include/basic.h"
 #include "./include/sqrt_decomp.h"
 #include "./include/segment_tree.h"
 #include "./include/fenwick.h"
 #include "./include/sparse_table.h"
-// #include "./include/hybrid_rmq.h"
+#include "./include/hybrid_rmq.h"
+#include <fstream>
 
 using namespace std;
 
@@ -156,28 +160,136 @@ void test_sparse_table() {
     print_test("Минимум [2,4] после update", min({8,100,9}), st.query(2,4));
 }
 
-// // --------------------------------------------------------------
-// // Тесты для HybridRMQ (корневая + sparse table)
-// void test_hybrid_rmq() {
-//     cout << "\n=== HybridRMQ (гибрид) ===\n";
-//     vector<int> arr = {10, 20, 5, 7, 30, 1, 25, 3};
-//     auto min_op = [](int a,int b){ return min(a,b); };
-//     int inf = numeric_limits<int>::max();
-//     // размер блока выберем 3 для наглядности
-//     HybridRMQ<int, decltype(min_op)> hybrid(arr, min_op, inf, 3);
-//     print_test("Минимум [1,6]", min({20,5,7,30,1,25}), hybrid.query(1,6));
-//     print_test("Минимум [0,7]", 1, hybrid.query(0,7));
-
-//     hybrid.update(5, 100); // arr[5] было 1, стало 100
-//     print_test("Минимум [0,7] после update(5,100)", min({10,20,5,7,30,100,25,3}), hybrid.query(0,7));
-//     print_test("Минимум [4,6] после update", min(30,100,25), hybrid.query(4,6));
-
-//     hybrid.update(2, -10);
-//     print_test("Минимум [0,7] после update(2,-10)", -10, hybrid.query(0,7));
-// }
-
 // --------------------------------------------------------------
+void test_hybrid_rmq() {
+    cout << "\n=== HybridRMQ (корневая + разреженная таблица) ===\n";
+    vector<int> arr = {5, 3, 8, 1, 9, 2, 7, 4, 6, 0, 11, 15, 3};
+    auto min_op = [](int a, int b) { return min(a, b); };
+    int inf = numeric_limits<int>::max();
+
+    HybridRMQ<int, decltype(min_op)> h_rmq(arr, min_op, inf);
+
+    print_test("Минимум на всем массиве [0,12]", brute_min(arr, 0, 12), h_rmq.query(0, 12));
+    print_test("Минимум внутри одного первого блока [0,2]", brute_min(arr, 0, 2), h_rmq.query(0, 2));
+    print_test("Минимум внутри одного среднего блока [4,5]", brute_min(arr, 4, 5), h_rmq.query(4, 5));
+    print_test("Минимум на стыке двух блоков [2,4]", brute_min(arr, 2, 4), h_rmq.query(2, 4));
+    print_test("Минимум через несколько блоков [1,8]", brute_min(arr, 1, 8), h_rmq.query(1, 8));
+    print_test("Запрос из одного элемента [5,5]", brute_min(arr, 5, 5), h_rmq.query(5, 5));
+    print_test("Минимум на хвосте массива [9,12]", brute_min(arr, 9, 12), h_rmq.query(9, 12));
+
+    auto sum_op = [](int a, int b) { return a + b; };
+    HybridRMQ<int, decltype(sum_op)> h_rsq(arr, sum_op, 0);
+    print_test("Сумма на отрезке [3,7] (проверка универсальности)", brute_sum(arr, 3, 7), h_rsq.query(3, 7));
+}
+
+vector<int> generate_array(int n) {
+    vector<int> arr(n);
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_int_distribution<> dis(1, 100);
+    for (int i = 0; i < n; i++) {
+        arr[i] = dis(gen);
+    }
+    return arr;
+}
+
+
 int main() {
+
+   ofstream out("data.txt");
+
+    vector<int> sizes = {2000, 5000, 8000, 11000, 14000, 17000, 20000};
+
+    for (int n : sizes) {
+        auto arr = generate_array(n);
+
+        out << n << " elements:\n";
+
+        // RSQ1D
+        RSQ1D<int> rsq(arr);
+        rsq.reset_query_ops();
+        int l = rand() % n;
+        int r = l + rand() % (n - l);
+        rsq.query(l, r);
+        out << "  RSQ1D (Prefix Sum) - build: " << rsq.get_build_ops() << ", query: " << rsq.get_query_ops() << "\n";
+
+        // RSQ2D
+        vector<vector<int>> mat(n, vector<int>(n));
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                mat[i][j] = rand() % 100;
+            }
+        }
+        RSQ2D<int> rsq2d(mat);
+        rsq2d.reset_query_ops();
+        int x1 = rand() % n;
+        int y1 = rand() % n;
+        int x2 = x1 + rand() % (n - x1);
+        int y2 = y1 + rand() % (n - y1);
+        rsq2d.query(x1, y1, x2, y2);
+        out << "  RSQ2D (2D Prefix Sum) - build: " << rsq2d.get_build_ops() << ", query: " << rsq2d.get_query_ops() << "\n";
+
+        // RMQ1D
+        RMQ1D<int> rmq(arr);
+        rmq.reset_query_ops();
+        l = rand() % n;
+        r = l + rand() % (n - l);
+        rmq.query(l, r);
+        out << "  RMQ1D (Naive O(n^2) table) - build: " << rmq.get_build_ops() << ", query: " << rmq.get_query_ops() << "\n";
+
+        // Fenwick
+        FenwickTree<int> fw(arr);
+        fw.reset_query_ops();
+        fw.reset_update_ops();
+        l = rand() % n;
+        r = l + rand() % (n - l);
+        fw.query(l, r);
+        fw.update(rand() % n, rand() % 100);
+        out << "  Fenwick Tree - build: " << fw.get_build_ops() << ", query: " << fw.get_query_ops() << ", update: " << fw.get_update_ops() << "\n";
+
+        // SegmentTree
+        auto sum_op = [](int a, int b) { return a + b; };
+        SegmentTree<int, decltype(sum_op)> seg(arr, sum_op, 0);
+        seg.reset_query_ops();
+        seg.reset_update_ops();
+        l = rand() % n;
+        r = l + rand() % (n - l);
+        seg.query(l, r);
+        seg.update(rand() % n, rand() % 100);
+        out << "  Segment Tree (sum) - build: " << seg.get_build_ops() << ", query: " << seg.get_query_ops() << ", update: " << seg.get_update_ops() << "\n";
+
+        // SparseTable
+        auto min_op = [](int a, int b) { return min(a, b); };
+        SparseTable<int, decltype(min_op)> st(arr, min_op, numeric_limits<int>::max());
+        st.reset_query_ops();
+        l = rand() % n;
+        r = l + rand() % (n - l);
+        st.query(l, r);
+        out << "  Sparse Table (RMQ) - build: " << st.get_build_ops() << ", query: " << st.get_query_ops() << "\n";
+
+        // SqrtDecomp
+        SqrtDecomposition<int, decltype(sum_op)> sqrtd(arr, sum_op, 0);
+        sqrtd.reset_query_ops();
+        l = rand() % n;
+        r = l + rand() % (n - l);
+        sqrtd.query(l, r);
+        out << "  Sqrt Decomposition (sum) - build: " << sqrtd.get_build_ops() << ", query: " << sqrtd.get_query_ops() << "\n";
+
+        // HybridRMQ
+        HybridRMQ<int, decltype(min_op)> hrmq(arr, min_op, numeric_limits<int>::max());
+        hrmq.reset_query_ops();
+        l = rand() % n;
+        r = l + rand() % (n - l);
+        hrmq.query(l, r);
+        out << "  Hybrid RMQ - build: " << hrmq.get_build_ops() << ", query: " << hrmq.get_query_ops() << "\n";
+
+        out << "\n";
+    }
+    out.close();
+
+
+
+
     test_rsq1d();
     test_rsq2d();
     test_rmq1d();
@@ -185,7 +297,7 @@ int main() {
     test_segment_tree();
     test_fenwick();
     test_sparse_table();
-    // test_hybrid_rmq();
+    test_hybrid_rmq();
 
     cout << "\nВсе тесты завершены.\n";
     return 0;

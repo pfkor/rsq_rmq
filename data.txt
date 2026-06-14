@@ -1,0 +1,70 @@
+2000 elements:
+  RSQ1D (Prefix Sum) - build: 2000, query: 1
+  RSQ2D (2D Prefix Sum) - build: 12000000, query: 3
+  RMQ1D (Naive O(n^2) table) - build: 1999000, query: 0
+  Fenwick Tree - build: 11120, query: 14, update: 6
+  Segment Tree (sum) - build: 1999, query: 19, update: 11
+  Sparse Table (RMQ) - build: 17964, query: 1
+  Sqrt Decomposition (sum) - build: 2000, query: 83
+  Hybrid RMQ - build: 6698, query: 4
+
+5000 elements:
+  RSQ1D (Prefix Sum) - build: 5000, query: 1
+  RSQ2D (2D Prefix Sum) - build: 75000000, query: 3
+  RMQ1D (Naive O(n^2) table) - build: 12497500, query: 0
+  Fenwick Tree - build: 33364, query: 13, update: 6
+  Segment Tree (sum) - build: 4999, query: 20, update: 13
+  Sparse Table (RMQ) - build: 51822, query: 1
+  Sqrt Decomposition (sum) - build: 5000, query: 81
+  Hybrid RMQ - build: 17324, query: 4
+
+8000 elements:
+  RSQ1D (Prefix Sum) - build: 8000, query: 1
+  RSQ2D (2D Prefix Sum) - build: 192000000, query: 3
+  RMQ1D (Naive O(n^2) table) - build: 31996000, query: 0
+  Fenwick Tree - build: 52480, query: 14, update: 5
+  Segment Tree (sum) - build: 7999, query: 22, update: 13
+  Sparse Table (RMQ) - build: 87822, query: 1
+  Sqrt Decomposition (sum) - build: 8000, query: 113
+  Hybrid RMQ - build: 28635, query: 4
+
+11000 elements:
+  RSQ1D (Prefix Sum) - build: 11000, query: 1
+  RSQ2D (2D Prefix Sum) - build: 363000000, query: 3
+  RMQ1D (Naive O(n^2) table) - build: 60494500, query: 0
+  Fenwick Tree - build: 78580, query: 12, update: 8
+  Segment Tree (sum) - build: 10999, query: 26, update: 14
+  Sparse Table (RMQ) - build: 126631, query: 1
+  Sqrt Decomposition (sum) - build: 11000, query: 76
+  Hybrid RMQ - build: 38824, query: 4
+
+14000 elements:
+  RSQ1D (Prefix Sum) - build: 14000, query: 1
+  RSQ2D (2D Prefix Sum) - build: 588000000, query: 3
+  RMQ1D (Naive O(n^2) table) - build: 97993000, query: 0
+  Fenwick Tree - build: 99808, query: 15, update: 9
+  Segment Tree (sum) - build: 13999, query: 25, update: 14
+  Sparse Table (RMQ) - build: 165631, query: 1
+  Sqrt Decomposition (sum) - build: 14000, query: 180
+  Hybrid RMQ - build: 49964, query: 4
+
+17000 elements:
+  RSQ1D (Prefix Sum) - build: 17000, query: 1
+  RSQ2D (2D Prefix Sum) - build: 867000000, query: 3
+  RMQ1D (Naive O(n^2) table) - build: 144491500, query: 0
+  Fenwick Tree - build: 134276, query: 18, update: 6
+  Segment Tree (sum) - build: 16999, query: 23, update: 14
+  Sparse Table (RMQ) - build: 205248, query: 1
+  Sqrt Decomposition (sum) - build: 17000, query: 251
+  Hybrid RMQ - build: 61491, query: 4
+
+20000 elements:
+  RSQ1D (Prefix Sum) - build: 20000, query: 1
+  RSQ2D (2D Prefix Sum) - build: 1200000000, query: 3
+  RMQ1D (Naive O(n^2) table) - build: 199990000, query: 0
+  Fenwick Tree - build: 153456, query: 11, update: 8
+  Segment Tree (sum) - build: 19999, query: 27, update: 14
+  Sparse Table (RMQ) - build: 247248, query: 1
+  Sqrt Decomposition (sum) - build: 20000, query: 132
+  Hybrid RMQ - build: 73067, query: 4
+

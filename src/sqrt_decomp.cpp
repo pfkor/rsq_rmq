@@ -21,9 +21,11 @@ SqrtDecomposition<T, BinaryOp>::SqrtDecomposition(const std::vector<T>& arr, Bin
     data = arr;
     block_agg.assign(num_blocks, identity);
 
+    _build_ops = 0;
     for (size_t i = 0; i < n; ++i) {
         size_t b = i / block_size;
         block_agg[b] = op(block_agg[b], data[i]);
+        _build_ops++;
     }
 }
 
@@ -35,29 +37,31 @@ T SqrtDecomposition<T, BinaryOp>::query(size_t l, size_t r) const {
     size_t right_block = r / block_size;
     T res = identity;
 
-    // entire range in a single block
+    _query_ops = 0;
+
     if (left_block == right_block) {
         for (size_t i = l; i <= r; ++i) {
             res = op(res, data[i]);
+            _query_ops++;
         }
         return res;
     }
 
-    // left border
     size_t left_end = (left_block + 1) * block_size - 1;
     for (size_t i = l; i <= left_end; ++i) {
         res = op(res, data[i]);
+        _query_ops++;
     }
 
-    // entire blocks
     for (size_t b = left_block + 1; b < right_block; ++b) {
         res = op(res, block_agg[b]);
+        _query_ops++;
     }
 
-    // right border
     size_t right_start = right_block * block_size;
     for (size_t i = right_start; i <= r; ++i) {
         res = op(res, data[i]);
+        _query_ops++;
     }
 
     return res;

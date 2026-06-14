@@ -19,6 +19,7 @@ void SegmentTree<T, BinaryOp>::build(const std::vector<T>& arr, size_t node, siz
     build(arr, right_child, mid + 1, right);
     
     tree[node] = op(tree[left_child], tree[right_child]);
+    _build_ops++;
 }
 
 template <typename T, typename BinaryOp>
@@ -29,16 +30,18 @@ T SegmentTree<T, BinaryOp>::query(size_t node, size_t left, size_t right, size_t
     size_t mid = left + (right - left) / 2;
     size_t left_child = node * 2;
     size_t right_child = node * 2 + 1;
-    
+
     T left_res = query(left_child, left, mid, l, r);
     T right_res = query(right_child, mid + 1, right, l, r);
-    
+
+    _query_ops++;
     return op(left_res, right_res);
 }
 
 template <typename T, typename BinaryOp>
 SegmentTree<T, BinaryOp>::SegmentTree(const std::vector<T>& arr, BinaryOp op, T identity)
     : n(arr.size()), op(op), identity(identity) {
+    _build_ops = 0;
     if (n == 0) {
         tree.resize(1);
         return;
@@ -70,5 +73,5 @@ void SegmentTree<T, BinaryOp>::update_tree(size_t node, size_t left, size_t righ
     if (pos <= mid) update_tree(node*2, left, mid, pos, value);
     if (pos > mid) update_tree(node*2+1, mid+1, right, pos, value);
     tree[node] = op(tree[node*2], tree[node*2+1]);
+    _update_ops++;
 }
-
